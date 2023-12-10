@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // 环境配置相关
 import { ConfigModule } from '@nestjs/config';
+import {JwtModule} from '@nestjs/jwt'
 
 @Module({
   imports: [
@@ -25,6 +26,11 @@ import { ConfigModule } from '@nestjs/config';
         synchronize: true, // 开启同步，生产中要禁止
         // entities: ['src/enties/**.ts'],
       }),
+    }),
+    JwtModule.register({
+      global:true,
+      secret:"guang",
+      signOptions:{expiresIn:'7d'}
     }),
     UserModule,
   ],
