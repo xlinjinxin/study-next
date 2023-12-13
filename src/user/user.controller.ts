@@ -10,6 +10,7 @@ import {
   Query,
   Inject,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
@@ -19,6 +20,7 @@ import { User } from '../enties/user.entity';
 import { Response } from 'express'
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/utils/result.vo';
+import { LoginGuard } from 'src/login.guard';
 
 // 设置swagger文档标签分类
 @ApiTags('用户模块')
@@ -64,5 +66,9 @@ export class UserController {
     
   }
 
+  @Post('list')
+  @UseGuards(LoginGuard)
+  @ApiOperation({summary:'用户列表'})
+  list(){}
  
 }
