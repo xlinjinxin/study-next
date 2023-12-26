@@ -14,11 +14,11 @@ function md5(str) {
 @Injectable()
 export class UserService extends Repository<User> {
   @InjectRepository(User)
-  private userRepository: Repository<User>;
+  public userRepository: Repository<User>;
   public register=async(createUserDto: CreateUserDto)=> {
     let user = await this.userRepository.findOneBy({ username: createUserDto.username });
     if (user) {
-      throw Error('用户已存在');
+      throw new Error('用户已存在');
     }
     const newUser = new User();
     newUser.password = md5(createUserDto.password);

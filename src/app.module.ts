@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // 环境配置相关
 import { ConfigModule } from '@nestjs/config';
 import {JwtModule} from '@nestjs/jwt'
+import { RoleModule } from './role/role.module';
+
 
 @Module({
   imports: [
@@ -29,10 +31,10 @@ import {JwtModule} from '@nestjs/jwt'
     }),
     JwtModule.register({
       global:true,
-      secret:"guang",
-      signOptions:{expiresIn:'7d'}
+      secret:"lin",
     }),
     UserModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
