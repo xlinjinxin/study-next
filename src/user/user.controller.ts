@@ -4,10 +4,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
   Inject,
   Res,
   UseGuards,
@@ -39,7 +35,6 @@ export class UserController {
     summary: '添加用户', // 接口描述信息
   })
   async register(@Body() createUserDto: CreateUserDto) {
-
     await this.userService.register(createUserDto);
     return new Result().success('success');
   }

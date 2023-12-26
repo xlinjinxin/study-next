@@ -23,17 +23,19 @@ export class UserService extends Repository<User> {
     const newUser = new User();
     newUser.password = md5(createUserDto.password);
     newUser.username = createUserDto.username;
-  
+
     try {
       await this.userRepository.save(newUser);
       return 'success';
     } catch (error) {
       return 'fail';
     }
-  }
+  };
 
   async login(userLoginDto: UserLoginDto) {
-    let user = await this.userRepository.findOneBy({ username: userLoginDto.username });
+    let user = await this.userRepository.findOneBy({
+      username: userLoginDto.username,
+    });
     if (!user) {
       throw new Error('用户不存在');
     }
