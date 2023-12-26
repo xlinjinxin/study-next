@@ -36,15 +36,15 @@ export class RoleController {
     });
   }
 
-//   @Post('/delete')
-//   @UseGuards(LoginGuard)
-//   @ApiOperation({ summary: '删除角色' })
-//   async delete(@Body() listDto: ListDto) {
-//    try {
-//    await this.roleService.repository
-//    } catch (error) {
+  // @Post('/delete')
+  // @UseGuards(LoginGuard)
+  // @ApiOperation({ summary: '删除角色' })
+  // async delete(@Body() listDto: ListDto) {
+  //  try {
+  //  await this.roleService.repository
+  //  } catch (error) {
     
-//    }
-//   }
+  //  }
+  // }
 
-// }
+}
