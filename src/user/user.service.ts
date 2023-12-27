@@ -57,6 +57,12 @@ export class UserService extends Repository<User> {
       [P in keyof T]?: Exclude<keyof U, keyof pageProp>;
     },
   ) {
+    for (const key in queryMap) {
+      if (Object.prototype.hasOwnProperty.call(queryMap, key)) {
+        const element = queryMap[key];
+      }
+    }
+
     this.userRepository
       .createQueryBuilder('user')
       .where('user.name=:name', { name: 1 })
