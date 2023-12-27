@@ -4,6 +4,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {Role} from './entities/role.entity'
+import {queryList} from 'src/utils/method'
 
 @Injectable()
 export class RoleService extends Repository<Role> {
@@ -18,4 +19,5 @@ export class RoleService extends Repository<Role> {
     return  this.repository.save(createRoleDto)
 
   }
+  public queryList=queryList
 }

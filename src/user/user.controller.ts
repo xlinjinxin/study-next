@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefrehTokenDto } from './dto/refresh-token.dto';
 import { User } from '../user/enties/user.entity';
-import { Response } from 'express';
+import { Response, query } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/utils/result.vo';
 import { ListDto } from './dto/list.dto';
@@ -113,10 +113,11 @@ export class UserController {
   @Post('list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '用户列表' })
-  async list(@Body() user: User) {
+  async list(@Body() query: QueryUserDto) {
+    console.log(this.userService. userRepository)
     // let data = await this.userService.userRepository.findAndCount(listDto);
     let data = await this.userService.queryList<User, QueryUserDto>(
-      { offset: 10, limit: 1, keyword: '', ...user },
+      query,
       {
         username: 'keyword',
       },

@@ -5,9 +5,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import * as crypto from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
+import {queryList} from 'src/utils/method'
 
-type queryProp<T, U> = T & U & pageProp;
-type pageProp = { offset: number; limit: number };
+
 function md5(str) {
   const hash = crypto.createHash('md5');
   hash.update(str);
@@ -50,24 +50,5 @@ export class UserService extends Repository<User> {
     }
   }
 
-  async queryList<T, U>(
-    query: queryProp<T, U>,
-    queryMap?: {
-      // [P in keyof queryProp<T>]?: P extends keyof T ? P : keyof T;
-      [P in keyof T]?: Exclude<keyof U, keyof pageProp>;
-    },
-  ) {
-    for (const key in queryMap) {
-      if (Object.prototype.hasOwnProperty.call(queryMap, key)) {
-        const element = queryMap[key];
-      }
-    }
-
-    this.userRepository
-      .createQueryBuilder('user')
-      .where('user.name=:name', { name: 1 })
-      .offset(query.offset)
-      .limit(query.limit)
-      .getManyAndCount();
-  }
+   public queryList=queryList
 }
