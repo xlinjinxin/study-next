@@ -12,23 +12,22 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefrehTokenDto } from './dto/refresh-token.dto';
-import { User } from '../enties/user.entity';
-import { Response } from 'express'
+import { User } from '../user/enties/user.entity';
+import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/utils/result.vo';
-import { ListDto } from './dto/list.dto'
+import { ListDto } from './dto/list.dto';
 import { LoginGuard } from 'src/login.guard';
+import { QueryUserDto } from './dto/query-user.dto';
 
 // 设置swagger文档标签分类
 @ApiTags('用户模块')
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) { }
+  constructor(private readonly userService: UserService) {}
 
   @Inject(JwtService)
-  private jwtService: JwtService
+  private jwtService: JwtService;
 
   @Post('register')
   @ApiOperation({
@@ -43,57 +42,70 @@ export class UserController {
   @ApiOperation({
     summary: '用户登录',
   })
-  async login(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) res: Response) {
+  async login(
+    @Body() createUserDto: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     try {
-
-      let user = await this.userService.login(createUserDto)
-      const accessToken = await this.jwtService.sign({
-        userId: user.id,
-        username: user.username,
-      }, {
-        expiresIn: '30m'
-      })
-      const refreshToken = await this.jwtService.sign({
-        userId: user.id,
-        username: user.username,
-      }, {
-        expiresIn: '2h'
-      })
+      let user = await this.userService.login(createUserDto);
+      const accessToken = await this.jwtService.sign(
+        {
+          userId: user.id,
+          username: user.username,
+        },
+        {
+          expiresIn: '30m',
+        },
+      );
+      const refreshToken = await this.jwtService.sign(
+        {
+          userId: user.id,
+          username: user.username,
+        },
+        {
+          expiresIn: '2h',
+        },
+      );
 
       return new Result().success({ ...user, refreshToken, accessToken });
     } catch (error) {
       console.log(JSON.stringify(error), error, 'this.userService');
-      return new Result().err(error.message, 500)
+      return new Result().err(error.message, 500);
     }
-
   }
 
   @Post('refrehToken')
-  @ApiOperation({ summary: "刷新token" })
+  @ApiOperation({ summary: '刷新token' })
   async refrehToken(@Body() refrehTokenDto: RefrehTokenDto) {
     try {
       const data = this.jwtService.verify(refrehTokenDto.refreshToken);
 
-      const user = await this.userService.userRepository.findOneBy({ id: data.userId });
-      console.log(user)
-
-      const accessToken = this.jwtService.sign({
-        userId: user.id,
-        username: user.username,
-      }, {
-        expiresIn: '30m'
+      const user = await this.userService.userRepository.findOneBy({
+        id: data.userId,
       });
+      console.log(user);
 
-      const refrehToken = this.jwtService.sign({
-        userId: user.id
-      }, {
-        expiresIn: '2h'
-      });
+      const accessToken = this.jwtService.sign(
+        {
+          userId: user.id,
+          username: user.username,
+        },
+        {
+          expiresIn: '30m',
+        },
+      );
+
+      const refrehToken = this.jwtService.sign(
+        {
+          userId: user.id,
+        },
+        {
+          expiresIn: '2h',
+        },
+      );
       return new Result().success({ refrehToken, accessToken });
-
-
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return new Result().err('系统异常', '500');
     }
   }
@@ -101,13 +113,18 @@ export class UserController {
   @Post('list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '用户列表' })
-  async list(@Body() listDto: ListDto) {
-    let data = await this.userService.userRepository.findAndCount(listDto)
+  async list(@Body() user: User) {
+    // let data = await this.userService.userRepository.findAndCount(listDto);
+    let data = await this.userService.queryList<User, QueryUserDto>(
+      { offset: 10, limit: 1, keyword: '', ...user },
+      {
+        username: 'keyword',
+      },
+    );
+
     return new Result().success({
-      list: data[0], total: data[1]
+      list: data[0],
+      total: data[1],
     });
   }
-
-
-
 }

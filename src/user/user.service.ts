@@ -1,11 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from '../enties/user.entity';
+import { User } from '../user/enties/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import * as crypto from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 
+type queryProp<T, U> = T & U & pageProp;
+type pageProp = { offset: number; limit: number };
 function md5(str) {
   const hash = crypto.createHash('md5');
   hash.update(str);
@@ -15,8 +17,10 @@ function md5(str) {
 export class UserService extends Repository<User> {
   @InjectRepository(User)
   public userRepository: Repository<User>;
-  public register=async(createUserDto: CreateUserDto)=> {
-    let user = await this.userRepository.findOneBy({ username: createUserDto.username });
+  public register = async (createUserDto: CreateUserDto) => {
+    let user = await this.userRepository.findOneBy({
+      username: createUserDto.username,
+    });
     if (user) {
       throw new Error('用户已存在');
     }
@@ -44,5 +48,20 @@ export class UserService extends Repository<User> {
     } else {
       throw new Error('密码错误');
     }
+  }
+
+  async queryList<T, U>(
+    query: queryProp<T, U>,
+    queryMap?: {
+      // [P in keyof queryProp<T>]?: P extends keyof T ? P : keyof T;
+      [P in keyof T]?: Exclude<keyof U, keyof pageProp>;
+    },
+  ) {
+    this.userRepository
+      .createQueryBuilder('user')
+      .where('user.name=:name', { name: 1 })
+      .offset(query.offset)
+      .limit(query.limit)
+      .getManyAndCount();
   }
 }

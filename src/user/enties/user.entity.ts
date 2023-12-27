@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Role } from './role.entity';
+import { Role } from 'src/role/entities/role.entity';
 
 // @Entity()装饰器自动从所有类生成一个SQL表，以及他们包含的元数据
 // @Entity('users') // sql表名为users
@@ -40,16 +40,13 @@ export class User {
   // roles: Role[];
   @ManyToMany(() => Role)
   @JoinTable({
-      name: 'user_role_relation'
+    name: 'user_role_relation',
   })
-
-  roles: Role[] 
+  roles: Role[];
 
   @CreateDateColumn()
   createAt: Date;
 
   @UpdateDateColumn()
   updateAt: Date;
-
-
 }
