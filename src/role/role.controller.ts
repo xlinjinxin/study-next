@@ -11,11 +11,13 @@ import {
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { LoginGuard } from 'src/login.guard';
 import { Result } from 'src/utils/result.vo';
-import { ListDto } from './dto/list.dto';
+import { QueryRoleDto } from './dto/query-role.dto';
+import { Role } from 'lib/enties/role.entity';
 
+@ApiTags('权限模块')
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
@@ -36,12 +38,21 @@ export class RoleController {
   @Post('/list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '角色列表' })
-  async roleList(@Body() listDto: ListDto) {
-    let data = await this.roleService.repository.findAndCount(listDto);
-    return new Result().success({
-      list: data[0],
-      total: data[1],
-    });
+  async roleList(@Body() queryRoleDto: QueryRoleDto) {
+    try {
+      let data = await this.roleService.queryList<Role, QueryRoleDto>(
+        queryRoleDto,
+        {
+          name: 'keyword',
+        },
+      );
+      return new Result().success({
+        list: data[0],
+        total: data[1],
+      });
+    } catch (error) {
+      return new Result().err('系统异常,请联系客服', 500);
+    }
   }
 
   @Post('/delete')

@@ -1,3 +1,5 @@
-export class RefrehTokenDto{
-    refreshToken:string
+import { ApiProperty } from '@nestjs/swagger';
+export class RefrehTokenDto {
+  @ApiProperty({})
+  refreshToken: string;
 }

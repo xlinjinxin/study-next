@@ -1,8 +1,9 @@
+import { ApiResponseProperty, ApiProperty } from '@nestjs/swagger';
 export class Result<T> {
   constructor() {}
-  private code: number;
-  private msg: string;
-  private data: T;
+  public code: number;
+  public msg: string;
+  public data: T;
 
   public success = (data: T) => {
     let res = new Result();
@@ -17,4 +18,14 @@ export class Result<T> {
     res.msg = msg;
     return res;
   };
+}
+
+export class SuccessResultVo<U> {
+  constructor() {}
+  @ApiResponseProperty()
+  public code: number;
+  @ApiResponseProperty()
+  public msg: string;
+  @ApiResponseProperty({})
+  public data?: U;
 }

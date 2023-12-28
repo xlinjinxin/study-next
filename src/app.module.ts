@@ -6,9 +6,9 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // 环境配置相关
 import { ConfigModule } from '@nestjs/config';
-import {JwtModule} from '@nestjs/jwt'
+import { JwtModule } from '@nestjs/jwt';
 import { RoleModule } from './role/role.module';
-
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -30,11 +30,12 @@ import { RoleModule } from './role/role.module';
       }),
     }),
     JwtModule.register({
-      global:true,
-      secret:"lin",
+      global: true,
+      secret: 'lin',
     }),
     UserModule,
     RoleModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
