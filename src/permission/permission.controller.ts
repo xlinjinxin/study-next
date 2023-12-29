@@ -1,34 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { PermissionService } from './permission.service';
-import { CreatePermissionDto } from './dto/create-permission.dto';
-import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoginGuard } from 'src/login.guard';
+import { Result } from 'src/utils/result.vo';
 
 @Controller('permission')
+@ApiTags('权限模块')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
-
-  @Post()
-  create(@Body() createPermissionDto: CreatePermissionDto) {
-    return this.permissionService.create(createPermissionDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.permissionService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permissionService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
-    return this.permissionService.update(+id, updatePermissionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionService.remove(+id);
+  @Post('/list')
+  @UseGuards(LoginGuard)
+  @ApiOperation({ summary: '获取权限列表' })
+  async list() {
+    try {
+      let data = await this.permissionService.repository.find();
+      return new Result().success(data);
+    } catch (error) {
+      return new Result().err(500, '系统异常');
+    }
   }
 }
