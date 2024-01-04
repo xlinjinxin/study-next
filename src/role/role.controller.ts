@@ -16,6 +16,7 @@ import { LoginGuard } from 'src/login.guard';
 import { Result } from 'src/utils/result.vo';
 import { QueryRoleDto } from './dto/query-role.dto';
 import { Role } from 'lib/enties/role.entity';
+import { DeleteDto } from './dto/delete.dto';
 
 @ApiTags('权限模块')
 @Controller('role')
@@ -51,6 +52,7 @@ export class RoleController {
         total: data[1],
       });
     } catch (error) {
+      console.log(error,'errr')
       return new Result().err('系统异常,请联系客服', 500);
     }
   }
@@ -58,9 +60,9 @@ export class RoleController {
   @Post('/delete')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '删除角色' })
-  async delete(@Body() id: number) {
+  async delete(@Body() deleteDto: DeleteDto) {
     try {
-      await this.roleService.repository.delete(id);
+      await this.roleService.repository.delete(deleteDto.id);
       return new Result().success('删除成功');
     } catch (error) {
       return new Result().err('删除失败', 500);

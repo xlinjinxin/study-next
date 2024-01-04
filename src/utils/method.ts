@@ -17,7 +17,7 @@ export function queryList<T, U>(
     }
   }
   const { current, pageSize } = query;
-  return this.userRepository
+  return this.repository
     .createQueryBuilder('item')
     .where(string, stringMap)
     .offset((current - 1) * pageSize)

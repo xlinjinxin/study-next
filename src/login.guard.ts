@@ -18,7 +18,7 @@ export class LoginGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     const authorization = request.header('authorization') || '';
-    console.log(request, 'context');
+    // console.log(request, 'context');
     const bearer = authorization.split(' ');
 
     if (!bearer || bearer.length < 2) {

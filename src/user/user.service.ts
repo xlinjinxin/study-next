@@ -16,9 +16,9 @@ function md5(str) {
 @Injectable()
 export class UserService extends Repository<User> {
   @InjectRepository(User)
-  public userRepository: Repository<User>;
+  public repository: Repository<User>;
   public register = async (createUserDto: CreateUserDto) => {
-    let user = await this.userRepository.findOneBy({
+    let user = await this.repository.findOneBy({
       username: createUserDto.username,
     });
     if (user) {
@@ -29,7 +29,7 @@ export class UserService extends Repository<User> {
     newUser.username = createUserDto.username;
 
     try {
-      await this.userRepository.save(newUser);
+      await this.repository.save(newUser);
       return 'success';
     } catch (error) {
       return 'fail';
@@ -37,7 +37,7 @@ export class UserService extends Repository<User> {
   };
 
   async login(userLoginDto: UserLoginDto) {
-    let user = await this.userRepository.findOneBy({
+    let user = await this.repository.findOneBy({
       username: userLoginDto.username,
     });
     if (!user) {

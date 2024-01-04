@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiOperation,
-  ApiResponse,
-  ApiResponseProperty,
-  ApiTags,
+  ApiTags,ApiResponse
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,6 +23,8 @@ import { ListDto } from './dto/list.dto';
 import { LoginGuard } from 'src/login.guard';
 import { QueryUserDto } from './dto/query-user.dto';
 import { QueryListDto } from 'src/utils/queryList.dto';
+// import { APIResponse } from 'src/utils/APIResponse.decorator';
+import { userVo } from './vo/login-user.vo';
 
 // 设置swagger文档标签分类
 @ApiTags('用户模块')
@@ -86,7 +86,7 @@ export class UserController {
     try {
       const data = this.jwtService.verify(refrehTokenDto.refreshToken);
 
-      const user = await this.userService.userRepository.findOneBy({
+      const user = await this.userService.repository.findOneBy({
         id: data.userId,
       });
       console.log(user);
@@ -119,14 +119,11 @@ export class UserController {
   @Post('list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '用户列表' })
-  @ApiResponse({
-    status: 200,
-    description: 'Success',
-    type: SuccessResultVo<QueryUserDto>,
-  })
+  @ApiResponse({type:userVo})
   async list(@Body() query: QueryUserDto) {
-    console.log(this.userService.userRepository);
-    // let data = await this.userService.userRepository.findAndCount(listDto);
+    
+    console.log(this.userService.repository);
+    // let data = await this.userService.repository.findAndCount(listDto);
     let data = await this.userService.queryList<User, QueryUserDto>(query, {
       username: 'keyword',
     });

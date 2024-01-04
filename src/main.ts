@@ -11,7 +11,7 @@ async function bootstrap() {
   // 设置全局路由前缀
   app.setGlobalPrefix('api');
   app.enableCors();
-  app.useGlobalFilters(new commonFilter());
+  // app.useGlobalFilters(new commonFilter());
   // 创建swagger文档
   generateDocument(app);
 

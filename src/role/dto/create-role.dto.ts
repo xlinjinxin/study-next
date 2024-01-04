@@ -15,6 +15,8 @@ export class CreateRoleDto {
   @ApiProperty({
     required: false,
     description: '权限列表',
+    isArray:true,
+    type:Permission
   })
-  permissions: Permission[];
+  permissions: any[];
 }
