@@ -37,7 +37,7 @@ export class RoleController {
   }
 
   @Post('/list')
-  @UseGuards(LoginGuard)
+  // @UseGuards(LoginGuard)
   @ApiOperation({ summary: '角色列表' })
   async roleList(@Body() queryRoleDto: QueryRoleDto) {
     try {
@@ -52,7 +52,7 @@ export class RoleController {
         total: data[1],
       });
     } catch (error) {
-      console.log(error,'errr')
+      console.log(error, 'errr');
       return new Result().err('系统异常,请联系客服', 500);
     }
   }
