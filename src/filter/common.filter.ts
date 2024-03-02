@@ -9,6 +9,7 @@ import {
 import { Response } from 'express';
 import logger from 'src/utils/log';
 
+//异常接口拦截
 @Catch(HttpException)
 export class commonFilter {
   catch(exception: any, host: ArgumentsHost) {

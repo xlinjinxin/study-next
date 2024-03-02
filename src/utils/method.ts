@@ -2,7 +2,6 @@ type pageProp = { current: number; pageSize: number };
 export function queryList<T, U>(
   query: U & pageProp,
   queryMap?: {
-    // [P in keyof queryProp<T>]?: P extends keyof T ? P : keyof T;
     [P in keyof T]?: Exclude<keyof U, keyof pageProp>;
   },
 ) {
