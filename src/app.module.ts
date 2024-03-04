@@ -13,6 +13,9 @@ import { ScheduleModule, SchedulerRegistry } from '@nestjs/schedule';
 import { CommonModule } from './common/common.module';
 import { OssMoudleModule } from './oss-moudle/oss-moudle.module';
 import { SmsMoudleModule } from './sms-moudle/sms-moudle.module';
+import { APP_GUARD } from '@nestjs/core';
+import { LoginGuard } from './login.guard';
+import { PermissionGuard } from './PermissonGuard';
 const yaml = require('js-yaml');
 const fs = require('fs');
 
@@ -51,7 +54,17 @@ const globalConfig = yaml.load(config);
     SmsMoudleModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: LoginGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+  ],
 })
 export class AppModule implements OnApplicationBootstrap {
   @Inject(SchedulerRegistry)

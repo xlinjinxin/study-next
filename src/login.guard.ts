@@ -8,14 +8,27 @@ import {
 import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
   @Inject(JwtService)
   private jwtService: JwtService;
+
+  @Inject(Reflector)
+  reflector: Reflector;
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const ignoreLogin = this.reflector.getAllAndOverride('ignore-login', [
+      context.getClass(),
+      context.getHandler(),
+    ]);
+
+    if (ignoreLogin) {
+      return true;
+    }
     const request: Request = context.switchToHttp().getRequest();
     const authorization = request.header('authorization') || '';
     // console.log(request, 'context');

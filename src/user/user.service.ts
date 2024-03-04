@@ -1,12 +1,11 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from '../user/enties/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserLoginDto } from './dto/user-login.dto';
 import * as crypto from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
-import {queryList} from 'src/utils/method'
-
+import { queryList } from 'src/utils/method';
 
 function md5(str) {
   const hash = crypto.createHash('md5');
@@ -50,5 +49,9 @@ export class UserService extends Repository<User> {
     }
   }
 
-   public queryList=queryList
+  async findRoldsByIds(roleIds: number[]) {
+    return this.repository.find({ id: In(roleIds) });
+  }
+
+  public queryList = queryList;
 }

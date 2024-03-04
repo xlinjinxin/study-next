@@ -8,10 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiTags,ApiResponse
-} from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefrehTokenDto } from './dto/refresh-token.dto';
@@ -24,6 +21,7 @@ import { LoginGuard } from 'src/login.guard';
 import { QueryUserDto } from './dto/query-user.dto';
 import { QueryListDto } from 'src/utils/queryList.dto';
 // import { APIResponse } from 'src/utils/APIResponse.decorator';
+import { IgnoreLogin } from '../utils/IgnoreLogin-decorator';
 import { userVo } from './vo/login-user.vo';
 
 // 设置swagger文档标签分类
@@ -48,6 +46,7 @@ export class UserController {
   @ApiOperation({
     summary: '用户登录',
   })
+  @IgnoreLogin()
   async login(
     @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) res: Response,
@@ -119,9 +118,8 @@ export class UserController {
   @Post('list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '用户列表' })
-  @ApiResponse({type:userVo})
+  @ApiResponse({ type: userVo })
   async list(@Body() query: QueryUserDto) {
-    
     console.log(this.userService.repository);
     // let data = await this.userService.repository.findAndCount(listDto);
     let data = await this.userService.queryList<User, QueryUserDto>(query, {
