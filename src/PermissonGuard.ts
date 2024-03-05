@@ -7,21 +7,24 @@ import {
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { UserService } from './user/user.service';
+import { Role } from 'lib/enties/role.entity';
+import { RoleService } from './role/role.service';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  @Inject(UserService)
-  private userService: UserService;
+  @Inject(RoleService)
+  private roleService: RoleService;
 
-  canActivate(
+ async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ):  Promise<boolean>  {
     const request: any = context.switchToHttp().getRequest();
-
+    let permission= await this.roleService.findRoldsByIds(request.user.roles.map(item=>item.id))
+    console.log(request.user,permission,123123123);
     if (!request.user) {
       return true;
     }
-    console.log(this.userService);
+   
 
     return true;
   }

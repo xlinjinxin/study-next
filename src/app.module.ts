@@ -64,6 +64,8 @@ const globalConfig = yaml.load(config);
       provide: APP_GUARD,
       useClass: PermissionGuard,
     },
+
+
   ],
 })
 export class AppModule implements OnApplicationBootstrap {

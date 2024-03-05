@@ -24,7 +24,7 @@ export class User {
   username: string;
 
   // @Column('json', { nullable: true }) json格式且可为空
-  @Column({select:false})
+  @Column({select:true})
   password: string;
 
   // 定义与其他表的关系
@@ -42,7 +42,7 @@ export class User {
   @JoinTable({
     name: 'user_role_relation',
   })
-  roles: Role[];
+  roles: any[];
 
   @CreateDateColumn()
   createAt: Date;

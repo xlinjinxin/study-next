@@ -23,6 +23,7 @@ import { QueryListDto } from 'src/utils/queryList.dto';
 // import { APIResponse } from 'src/utils/APIResponse.decorator';
 import { IgnoreLogin } from '../utils/IgnoreLogin-decorator';
 import { userVo } from './vo/login-user.vo';
+import { EditDto } from './dto/edit.dto';
 
 // 设置swagger文档标签分类
 @ApiTags('用户模块')
@@ -53,9 +54,10 @@ export class UserController {
   ) {
     try {
       let user = await this.userService.login(createUserDto);
+      console.log(user,'123123123user')
       const accessToken = await this.jwtService.sign(
         {
-          userId: user.id,
+          roles: user.roles,
           username: user.username,
         },
         {
@@ -64,7 +66,7 @@ export class UserController {
       );
       const refreshToken = await this.jwtService.sign(
         {
-          userId: user.id,
+          roles: user.roles,
           username: user.username,
         },
         {
@@ -92,7 +94,7 @@ export class UserController {
 
       const accessToken = this.jwtService.sign(
         {
-          userId: user.id,
+          roles: user.roles,
           username: user.username,
         },
         {
@@ -130,5 +132,17 @@ export class UserController {
       list: data[0],
       total: data[1],
     });
+  }
+
+  @Post('/edit')
+  @ApiOperation({ summary: '创建或更新角色' })
+  async createOrUpdate(@Body() createRoleDto: EditDto) {
+    //创建操作
+    try {
+      await this.userService.edit(createRoleDto);
+      return new Result().success('创建成功');
+    } catch (error) {
+      return new Result().err(error.message, 500);
+    }
   }
 }

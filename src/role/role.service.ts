@@ -56,4 +56,7 @@ export class RoleService extends Repository<Role> {
       .take(pageSize)
       .getManyAndCount();
   }
+  public async findRoldsByIds(roleIds: number[]) {
+    return  this.repository.createQueryBuilder('item').leftJoinAndSelect('item.permissions', 'permission').whereInIds(roleIds).getMany()
+  }
 }

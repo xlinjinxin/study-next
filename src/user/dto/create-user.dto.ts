@@ -13,4 +13,6 @@ export class CreateUserDto {
     description: '密码',
   })
   password: string;
+
+  roles?:any[]
 }

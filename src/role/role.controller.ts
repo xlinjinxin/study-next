@@ -24,7 +24,6 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post('/createOrUpdate')
-  @UseGuards(LoginGuard)
   @ApiOperation({ summary: '创建或更新角色' })
   async createOrUpdate(@Body() createRoleDto: CreateRoleDto) {
     //创建操作
