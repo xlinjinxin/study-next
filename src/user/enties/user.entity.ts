@@ -24,7 +24,7 @@ export class User {
   username: string;
 
   // @Column('json', { nullable: true }) json格式且可为空
-  @Column({select:false})
+  @Column()
   password: string;
 
   // 定义与其他表的关系

@@ -42,6 +42,7 @@ export class UserService extends Repository<User> {
     if (!user) {
       throw new Error('用户不存在');
     }
+    console.log(user, 'user');
     if (user.password == md5(userLoginDto.password)) {
       return user;
     } else {
@@ -50,7 +51,8 @@ export class UserService extends Repository<User> {
   }
 
   async findRoldsByIds(roleIds: number[]) {
-    return this.repository.find({ id: In(roleIds) });
+    // return this.repository.find({ id: In(roleIds) });
+    
   }
 
   public queryList = queryList;
