@@ -35,6 +35,7 @@ export class UserController {
   private jwtService: JwtService;
 
   @Post('register')
+  @IgnoreLogin()
   @ApiOperation({
     summary: '添加用户', // 接口描述信息
   })

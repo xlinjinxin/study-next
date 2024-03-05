@@ -43,6 +43,7 @@ export class UserService extends Repository<User> {
     if (!user) {
       throw new Error('用户不存在');
     }
+    console.log(user, 'user');
     if (user.password == md5(userLoginDto.password)) {
       return user;
     } else {
