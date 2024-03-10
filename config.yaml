@@ -1,9 +1,9 @@
 mysql:
-  host: 'localhost'
+  host: '8.138.91.88'
   port: +3306
   username: 'root'
   database: 'nest_mysql'
-  password: '123456'
+  password: 'Qq.123456'
 
 jwt:
   secret: 'lin'

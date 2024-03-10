@@ -57,6 +57,17 @@ export class RoleService extends Repository<Role> {
       .getManyAndCount();
   }
   public async findRoldsByIds(roleIds: number[]) {
-    return  this.repository.createQueryBuilder('item').leftJoinAndSelect('item.permissions', 'permission').whereInIds(roleIds).getMany()
+    let result=[]
+    let map={}
+    let roles= await this.repository.createQueryBuilder('item').leftJoinAndSelect('item.permissions', 'permission').whereInIds(roleIds).getMany()
+    roles.forEach(item => {
+      item.permissions?.forEach(itm => {
+        if(!map[itm.id]){
+          result.push(itm.id)
+          map[itm.id]=true
+        }
+      });
+    });
+    return result
   }
 }
