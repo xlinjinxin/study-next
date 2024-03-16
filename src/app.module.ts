@@ -16,6 +16,7 @@ import { SmsMoudleModule } from './sms-moudle/sms-moudle.module';
 import { APP_GUARD } from '@nestjs/core';
 import { LoginGuard } from './login.guard';
 import { PermissionGuard } from './PermissonGuard';
+import { TaskModule } from './task/task.module';
 const yaml = require('js-yaml');
 const fs = require('fs');
 
@@ -52,6 +53,7 @@ const globalConfig = yaml.load(config);
     ScheduleModule.forRoot(),
     OssMoudleModule,
     SmsMoudleModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [

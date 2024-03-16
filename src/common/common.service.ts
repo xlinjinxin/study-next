@@ -25,10 +25,9 @@ export class CommonService {
         name: '系统邮件',
         address: '993740196@qq.com',
       },
-      to: '993740196@qq.com',
+      to:createCommonDto.email,
       subject: 'null',
-      html: '12313',
+      html: createCommonDto.content,
     });
-    console.log(123213);
   }
 }

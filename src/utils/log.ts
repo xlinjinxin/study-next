@@ -9,7 +9,7 @@ const logger = winston.createLogger({
     winston.format.colorize(),
   ),
   transports: [
-    new winston.transports.Console(),
+    // new winston.transports.Console(),
     new winston.transports.DailyRotateFile({
       level: 'info',
       dirname: 'log',

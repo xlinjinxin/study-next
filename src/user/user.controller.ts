@@ -24,6 +24,7 @@ import { QueryListDto } from 'src/utils/queryList.dto';
 import { IgnoreLogin } from '../utils/IgnoreLogin-decorator';
 import { userVo } from './vo/login-user.vo';
 import { EditDto } from './dto/edit.dto';
+import { RequirePermission } from 'src/utils/permission.decorator';
 
 // 设置swagger文档标签分类
 @ApiTags('用户模块')
@@ -55,7 +56,6 @@ export class UserController {
   ) {
     try {
       let user = await this.userService.login(createUserDto);
-      console.log(user,'123123123user')
       const accessToken = await this.jwtService.sign(
         {
           roles: user.roles,
@@ -121,6 +121,7 @@ export class UserController {
   @Post('list')
   @UseGuards(LoginGuard)
   @ApiOperation({ summary: '用户列表' })
+  @RequirePermission('2')
   @ApiResponse({ type: userVo })
   async list(@Body() query: QueryUserDto) {
     console.log(this.userService.repository);

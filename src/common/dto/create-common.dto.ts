@@ -1,1 +1,4 @@
-export class CreateCommonDto {}
+export class CreateCommonDto {
+    content:string
+    email:string
+}
